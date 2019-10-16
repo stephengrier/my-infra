@@ -8,7 +8,7 @@ resource "aws_route53_zone" "grier_org_uk" {
 
 resource "aws_route53_record" "grier_org_uk_mx" {
   zone_id = "${aws_route53_zone.grier_org_uk.zone_id}"
-  name    = "@"
+  name    = "${local.grier_org_uk_domain}"
   type    = "MX"
   ttl     = "86400"
 
@@ -19,7 +19,7 @@ resource "aws_route53_record" "grier_org_uk_mx" {
 
 resource "aws_route53_record" "grier_org_uk_txt" {
   zone_id = "${aws_route53_zone.grier_org_uk.zone_id}"
-  name    = "@"
+  name    = "${local.grier_org_uk_domain}"
   type    = "TXT"
   ttl     = "86400"
 
@@ -30,7 +30,7 @@ resource "aws_route53_record" "grier_org_uk_txt" {
 
 resource "aws_route53_record" "grier_org_uk_a" {
   zone_id = "${aws_route53_zone.grier_org_uk.zone_id}"
-  name    = "@"
+  name    = "${local.grier_org_uk_domain}"
   type    = "A"
   ttl     = "86400"
   records = ["86.54.115.54"]

@@ -8,7 +8,7 @@ resource "aws_route53_zone" "stephengrier_com" {
 
 resource "aws_route53_record" "stephengrier_com_mx" {
   zone_id = "${aws_route53_zone.stephengrier_com.zone_id}"
-  name    = "@"
+  name    = "${local.stephengrier_com_domain}"
   type    = "MX"
   ttl     = "86400"
 
@@ -20,7 +20,7 @@ resource "aws_route53_record" "stephengrier_com_mx" {
 
 resource "aws_route53_record" "stephengrier_com_txt" {
   zone_id = "${aws_route53_zone.stephengrier_com.zone_id}"
-  name    = "@"
+  name    = "${local.stephengrier_com_domain}"
   type    = "TXT"
   ttl     = "86400"
 
