@@ -60,7 +60,7 @@ resource "aws_route53_record" "grier_org_uk_pugwash" {
   records = ["86.54.115.54"]
 }
 
-resource "aws_route53_record" "grier_org_uk_mx" {
+resource "aws_route53_record" "grier_org_uk_a_mx" {
   zone_id = "${aws_route53_zone.grier_org_uk.zone_id}"
   name    = "mx"
   type    = "A"
