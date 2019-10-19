@@ -29,7 +29,7 @@ resource "aws_route53_record" "stephengrier_com_txt" {
   ]
 }
 
-resource "aws_route53_record" "stephengrier_com_www" {
+resource "aws_route53_record" "www_stephengrier_com" {
   zone_id = "${aws_route53_zone.stephengrier_com.zone_id}"
   name    = "www"
   type    = "A"

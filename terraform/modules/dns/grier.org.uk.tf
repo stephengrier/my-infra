@@ -28,7 +28,7 @@ resource "aws_route53_record" "grier_org_uk_txt" {
   ]
 }
 
-resource "aws_route53_record" "grier_org_uk_a" {
+resource "aws_route53_record" "grier_org_uk" {
   zone_id = "${aws_route53_zone.grier_org_uk.zone_id}"
   name    = "${local.grier_org_uk_domain}"
   type    = "A"
@@ -36,7 +36,7 @@ resource "aws_route53_record" "grier_org_uk_a" {
   records = ["86.54.115.54"]
 }
 
-resource "aws_route53_record" "grier_org_uk_www" {
+resource "aws_route53_record" "www_grier_org_uk" {
   zone_id = "${aws_route53_zone.grier_org_uk.zone_id}"
   name    = "www"
   type    = "A"
@@ -44,7 +44,7 @@ resource "aws_route53_record" "grier_org_uk_www" {
   records = ["86.54.115.54"]
 }
 
-resource "aws_route53_record" "grier_org_uk_imap" {
+resource "aws_route53_record" "imap_grier_org_uk" {
   zone_id = "${aws_route53_zone.grier_org_uk.zone_id}"
   name    = "imap"
   type    = "A"
@@ -52,7 +52,7 @@ resource "aws_route53_record" "grier_org_uk_imap" {
   records = ["86.54.115.54"]
 }
 
-resource "aws_route53_record" "grier_org_uk_pugwash" {
+resource "aws_route53_record" "pugwash_grier_org_uk" {
   zone_id = "${aws_route53_zone.grier_org_uk.zone_id}"
   name    = "pugwash"
   type    = "A"
@@ -60,7 +60,7 @@ resource "aws_route53_record" "grier_org_uk_pugwash" {
   records = ["86.54.115.54"]
 }
 
-resource "aws_route53_record" "grier_org_uk_a_mx" {
+resource "aws_route53_record" "mx_grier_org_uk" {
   zone_id = "${aws_route53_zone.grier_org_uk.zone_id}"
   name    = "mx"
   type    = "A"
