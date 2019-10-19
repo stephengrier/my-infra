@@ -93,7 +93,7 @@ resource "aws_route53_record" "mta2_blueparity_net" {
   records = ["86.54.115.54"]
 }
 
-resource "aws_route53_record" "mta2.blueparity_net_txt" {
+resource "aws_route53_record" "mta2_blueparity_net_txt" {
   zone_id = "${aws_route53_zone.blueparity_net.zone_id}"
   name    = "mta2"
   type    = "TXT"
