@@ -3,7 +3,7 @@ locals {
 }
 
 resource "aws_route53_zone" "grier_org_uk" {
-  name   = "${local.grier_org_uk_domain}"
+  name = "${local.grier_org_uk_domain}"
 }
 
 resource "aws_route53_record" "grier_org_uk_mx" {

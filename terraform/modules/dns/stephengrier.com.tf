@@ -3,7 +3,7 @@ locals {
 }
 
 resource "aws_route53_zone" "stephengrier_com" {
-  name   = "${local.stephengrier_com_domain}"
+  name = "${local.stephengrier_com_domain}"
 }
 
 resource "aws_route53_record" "stephengrier_com_mx" {
