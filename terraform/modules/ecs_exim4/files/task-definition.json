@@ -1,0 +1,44 @@
+[
+  {
+    "name": "exim4",
+    "image": "stephengrier/exim4:latest",
+    "memory": 248,
+    "essential": true,
+    "portMappings": [
+      {
+        "hostPort": 8025,
+        "containerPort": 8025
+      }
+    ],
+    "environment": [
+      {
+        "Name": "LOCAL_DOMAINS",
+        "Value": "grier.org.uk:stephengrier.com:blueparity.net"
+      },
+      {
+        "Name": "PRIMARY_HOSTNAME",
+	"Value": "mta3.blueparity.net"
+      },
+      {
+        "Name": "RELAY_TO_DOMAINS",
+	"Value": ""
+      },
+      {
+        "Name": "CYRUS_DOMAIN",
+	"Value": "imap.blueparity.net"
+      }
+    ],
+    "volumesFrom": [
+      {
+        "sourceContainer": "exim4-virtualdomains",
+        "readOnly": true
+      }
+    ]
+  },
+  {
+    "name": "exim4-virtualdomains",
+    "image": "${account_id}.dkr.ecr.${region}.amazonaws.com/exim4-virtualdomains:latest",
+    "memory": 64,
+    "essential": false
+  }
+]
