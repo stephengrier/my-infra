@@ -10,9 +10,10 @@ resource "aws_route53_record" "stephengrier_com_mx" {
   zone_id = "${aws_route53_zone.stephengrier_com.zone_id}"
   name    = "${local.stephengrier_com_domain}"
   type    = "MX"
-  ttl     = "86400"
+  ttl     = "600"
 
   records = [
+    "5 mta3.blueparity.net.",
     "10 mta1.blueparity.net.",
     "20 mta2.blueparity.net.",
   ]
