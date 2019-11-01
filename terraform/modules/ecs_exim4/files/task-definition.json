@@ -33,7 +33,15 @@
         "sourceContainer": "exim4-virtualdomains",
         "readOnly": true
       }
-    ]
+    ],
+    "logConfiguration": {
+      "logDriver": "awslogs",
+      "options": {
+        "awslogs-group": "exim4",
+        "awslogs-region": "eu-west-2",
+        "awslogs-stream-prefix": "exim4"
+      }
+    }
   },
   {
     "name": "exim4-virtualdomains",
