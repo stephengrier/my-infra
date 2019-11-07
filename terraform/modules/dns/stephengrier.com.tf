@@ -33,7 +33,7 @@ resource "aws_route53_record" "stephengrier_com_txt" {
 resource "aws_route53_record" "www_stephengrier_com" {
   zone_id = "${aws_route53_zone.stephengrier_com.zone_id}"
   name    = "www"
-  type    = "A"
-  ttl     = "86400"
-  records = ["212.13.198.8"]
+  type    = "CNAME"
+  ttl     = "300"
+  records = ["stephengrier.github.io"]
 }
