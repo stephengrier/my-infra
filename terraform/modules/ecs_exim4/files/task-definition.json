@@ -26,10 +26,6 @@
       {
         "Name": "CYRUS_DOMAIN",
 	"Value": "imap.blueparity.net"
-      },
-      {
-        "Name": "MX_FAIL_DOMAINS",
-        "Value": "pugwash.grier.org.uk"
       }
     ],
     "volumesFrom": [
