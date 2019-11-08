@@ -13,7 +13,7 @@ resource "aws_route53_record" "grier_org_uk_mx" {
   ttl     = "86400"
 
   records = [
-    "20 mta2.blueparity.net.",
+    "20 mta3.blueparity.net.",
   ]
 }
 

@@ -13,9 +13,8 @@ resource "aws_route53_record" "stephengrier_com_mx" {
   ttl     = "600"
 
   records = [
-    "5 mta3.blueparity.net.",
-    "10 mta1.blueparity.net.",
-    "20 mta2.blueparity.net.",
+    "10 mta3.blueparity.net.",
+    "20 mta1.blueparity.net.",
   ]
 }
 

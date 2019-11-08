@@ -13,8 +13,7 @@ resource "aws_route53_record" "blueparity_net_mx" {
   ttl     = "86400"
 
   records = [
-    "10 mta1.blueparity.net.",
-    "20 mta2.blueparity.net.",
+    "10 mta3.blueparity.net.",
   ]
 }
 
