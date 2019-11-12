@@ -38,10 +38,7 @@ resource "aws_route" "private_default" {
     count.index
   )}"
 
-  nat_gateway_id = "${element(
-    aws_nat_gateway.ecs.*.id,
-    count.index
-  )}"
+  network_interface_id = "${element(aws_network_interface.nat_eni.*.id, count.index)}"
 }
 
 resource "aws_route_table_association" "private" {
