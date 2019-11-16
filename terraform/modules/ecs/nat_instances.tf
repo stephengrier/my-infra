@@ -14,15 +14,6 @@ resource "aws_network_interface" "nat_eni" {
   }
 }
 
-resource "aws_eip" "nat" {
-  count             = "${local.az_count}"
-  network_interface = "${element(aws_network_interface.nat_eni.*.id, count.index)}"
-
-  tags = {
-    Name = "nat-instance-eip-${count.index}"
-  }
-}
-
 data "aws_ami" "amazon_nat" {
   most_recent = true
   owners      = ["amazon"]
