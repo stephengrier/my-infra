@@ -14,7 +14,6 @@ resource "aws_route53_record" "stephengrier_com_mx" {
 
   records = [
     "10 mta3.blueparity.net.",
-    "20 mta1.blueparity.net.",
   ]
 }
 
