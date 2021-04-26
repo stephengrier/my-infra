@@ -28,46 +28,6 @@ resource "aws_route53_record" "blueparity_net_txt" {
   ]
 }
 
-resource "aws_route53_record" "mta1_blueparity_net" {
-  zone_id = "${aws_route53_zone.blueparity_net.zone_id}"
-  name    = "mta1"
-  type    = "A"
-  ttl     = "86400"
-  records = ["212.13.198.9"]
-}
-
-resource "aws_route53_record" "mta1_blueparity_net_aaaa" {
-  zone_id = "${aws_route53_zone.blueparity_net.zone_id}"
-  name    = "mta1"
-  type    = "AAAA"
-  ttl     = "86400"
-  records = ["2001:ba8:0:1ce:2::54"]
-}
-
-resource "aws_route53_record" "mta1_blueparity_net_txt" {
-  zone_id = "${aws_route53_zone.blueparity_net.zone_id}"
-  name    = "mta1"
-  type    = "TXT"
-  ttl     = "86400"
-  records = ["v=spf1 a -all"]
-}
-
-resource "aws_route53_record" "mta2_blueparity_net" {
-  zone_id = "${aws_route53_zone.blueparity_net.zone_id}"
-  name    = "mta2"
-  type    = "A"
-  ttl     = "86400"
-  records = ["86.54.115.54"]
-}
-
-resource "aws_route53_record" "mta2_blueparity_net_txt" {
-  zone_id = "${aws_route53_zone.blueparity_net.zone_id}"
-  name    = "mta2"
-  type    = "TXT"
-  ttl     = "86400"
-  records = ["v=spf1 a -all"]
-}
-
 resource "aws_route53_record" "zebedee_blueparity_net" {
   zone_id = "${aws_route53_zone.blueparity_net.zone_id}"
   name    = "zebedee"
