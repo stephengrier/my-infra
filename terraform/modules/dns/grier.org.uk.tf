@@ -10,10 +10,11 @@ resource "aws_route53_record" "grier_org_uk_mx" {
   zone_id = "${aws_route53_zone.grier_org_uk.zone_id}"
   name    = "${local.grier_org_uk_domain}"
   type    = "MX"
-  ttl     = "86400"
+  ttl     = "3600"
 
   records = [
-    "20 mta3.blueparity.net.",
+    "10 mx0.123-reg.co.uk.",
+    "20 mx1.123-reg.co.uk.",
   ]
 }
 
