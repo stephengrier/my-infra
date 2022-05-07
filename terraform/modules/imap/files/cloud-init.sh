@@ -118,10 +118,10 @@ debconf-set-selections <<< "cyrus-common cyrus-common/removespools boolean false
 
 apt-get install --yes \
                 -o Dpkg::Options::="--force-confold" \
-                   cyrus-admin-2.4 \
-                   cyrus-clients-2.4 \
-                   cyrus-common-2.4 \
-                   cyrus-imapd-2.4 \
+                   cyrus-admin \
+                   cyrus-clients \
+                   cyrus-common \
+                   cyrus-imapd \
                    libpam-ldap \
                    sasl2-bin
 
@@ -175,6 +175,8 @@ openssl req \
         -out /etc/ssl/certs/imap.crt \
         -config /tmp/openssl.cnf \
         -days 1095
+
+chown cyrus /etc/ssl/certs/imap.key
 
 # Finally, start the service.
 service cyrus-imapd start
