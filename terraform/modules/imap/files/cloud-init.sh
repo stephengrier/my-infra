@@ -49,18 +49,18 @@ gpg --verify awscliv2.sig awscliv2.zip
 unzip awscliv2.zip && ./aws/install
 
 # Associate Elastic IP.
-aws2 --region ${region} ec2 associate-address \
+aws --region ${region} ec2 associate-address \
      --allocation-id ${eip_id} \
      --instance-id $(ec2metadata --instance-id)
 
 # Attach EBS data volumes. We have to do this here because we're using
 # an ASG and launch templates don't allow attaching specific volumes.
-aws2 --region ${region} ec2 attach-volume \
+aws --region ${region} ec2 attach-volume \
      --device /dev/sdf \
      --instance-id $(ec2metadata --instance-id) \
      --volume-id ${ldap_volume_id}
 
-aws2 --region ${region} ec2 attach-volume \
+aws --region ${region} ec2 attach-volume \
      --device /dev/sdg \
      --instance-id $(ec2metadata --instance-id) \
      --volume-id ${imap_volume_id}
@@ -101,12 +101,12 @@ service slapd start
 mount -a
 
 # Pull Cyrus' config files from parameter store.
-aws2 ssm get-parameter \
+aws ssm get-parameter \
   --name "/imap/config/${environment}/imapd_conf" \
   --with-decryption \
   | jq -j .Parameter.Value > /etc/imapd.conf
 
-aws2 ssm get-parameter \
+aws ssm get-parameter \
   --name "/imap/config/${environment}/cyrus_conf" \
   --with-decryption \
   | jq -j .Parameter.Value > /etc/cyrus.conf
