@@ -53,5 +53,5 @@ resource "aws_route53_record" "imap_blueparity_net" {
   name    = "imap"
   type    = "A"
   ttl     = "86400"
-  records = ["54.217.215.155"]
+  records = ["52.213.67.140"]
 }
