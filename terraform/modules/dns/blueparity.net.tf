@@ -39,11 +39,3 @@ resource "aws_route53_record" "pugwash_blueparity_net" {
   ttl     = "86400"
   records = ["86.54.115.54"]
 }
-
-resource "aws_route53_record" "imap_blueparity_net" {
-  zone_id = aws_route53_zone.blueparity_net.zone_id
-  name    = "imap"
-  type    = "A"
-  ttl     = "86400"
-  records = ["52.213.67.140"]
-}
