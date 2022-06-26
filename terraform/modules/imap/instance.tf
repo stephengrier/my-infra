@@ -9,7 +9,7 @@ data "aws_ami" "ami" {
 }
 
 data "template_file" "user_data" {
-  template = "${file("${path.module}/files/cloud-init.sh")}"
+  template = file("${path.module}/files/cloud-init.sh")
 
   vars = {
     environment    = "${var.environment}"
@@ -22,12 +22,12 @@ data "template_file" "user_data" {
 
 resource "aws_launch_template" "cluster" {
   name_prefix = "${var.cluster_name}-instance"
-  image_id    = "${data.aws_ami.ami.id}"
-  user_data   = "${base64encode(data.template_file.user_data.rendered)}"
+  image_id    = data.aws_ami.ami.id
+  user_data   = base64encode(data.template_file.user_data.rendered)
   key_name    = "cardno:000605972621"
 
   iam_instance_profile {
-    name = "${aws_iam_instance_profile.imap_instance.name}"
+    name = aws_iam_instance_profile.imap_instance.name
   }
 
   network_interfaces {
@@ -38,16 +38,16 @@ resource "aws_launch_template" "cluster" {
 }
 
 resource "aws_autoscaling_group" "asg" {
-  name                = "${var.cluster_name}"
+  name                = var.cluster_name
   vpc_zone_identifier = ["${element(aws_subnet.public.*.id, 0)}"]
-  max_size            = "${var.number_of_instances}"
-  min_size            = "${var.number_of_instances}"
-  desired_capacity    = "${var.number_of_instances}"
+  max_size            = var.number_of_instances
+  min_size            = var.number_of_instances
+  desired_capacity    = var.number_of_instances
 
   mixed_instances_policy {
     launch_template {
       launch_template_specification {
-        launch_template_id = "${aws_launch_template.cluster.id}"
+        launch_template_id = aws_launch_template.cluster.id
         version            = "$Latest"
       }
 
@@ -83,7 +83,7 @@ resource "aws_autoscaling_group" "asg" {
 
   tag {
     key                 = "Environment"
-    value               = "${var.environment}"
+    value               = var.environment
     propagate_at_launch = true
   }
 }

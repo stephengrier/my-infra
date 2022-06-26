@@ -13,7 +13,7 @@ data "aws_ebs_volume" "cloud1_imap_data" {
 }
 
 resource "aws_ebs_snapshot" "ldap_data_snapshot" {
-  volume_id   = "${data.aws_ebs_volume.cloud1_ldap_data.id}"
+  volume_id   = data.aws_ebs_volume.cloud1_ldap_data.id
   description = "cloud1 ldap data snapshot"
 
   tags = {
@@ -22,7 +22,7 @@ resource "aws_ebs_snapshot" "ldap_data_snapshot" {
 }
 
 resource "aws_ebs_snapshot" "imap_data_snapshot" {
-  volume_id   = "${data.aws_ebs_volume.cloud1_imap_data.id}"
+  volume_id   = data.aws_ebs_volume.cloud1_imap_data.id
   description = "cloud1 imap data snapshot"
 
   tags = {

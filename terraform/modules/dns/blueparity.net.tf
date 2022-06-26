@@ -3,12 +3,12 @@ locals {
 }
 
 resource "aws_route53_zone" "blueparity_net" {
-  name = "${local.blueparity_net_domain}"
+  name = local.blueparity_net_domain
 }
 
 resource "aws_route53_record" "blueparity_net_mx" {
-  zone_id = "${aws_route53_zone.blueparity_net.zone_id}"
-  name    = "${local.blueparity_net_domain}"
+  zone_id = aws_route53_zone.blueparity_net.zone_id
+  name    = local.blueparity_net_domain
   type    = "MX"
   ttl     = "86400"
 
@@ -22,8 +22,8 @@ resource "aws_route53_record" "blueparity_net_mx" {
 }
 
 resource "aws_route53_record" "blueparity_net_txt" {
-  zone_id = "${aws_route53_zone.blueparity_net.zone_id}"
-  name    = "${local.blueparity_net_domain}"
+  zone_id = aws_route53_zone.blueparity_net.zone_id
+  name    = local.blueparity_net_domain
   type    = "TXT"
   ttl     = "86400"
 
@@ -33,7 +33,7 @@ resource "aws_route53_record" "blueparity_net_txt" {
 }
 
 resource "aws_route53_record" "pugwash_blueparity_net" {
-  zone_id = "${aws_route53_zone.blueparity_net.zone_id}"
+  zone_id = aws_route53_zone.blueparity_net.zone_id
   name    = "pugwash"
   type    = "A"
   ttl     = "86400"
@@ -41,7 +41,7 @@ resource "aws_route53_record" "pugwash_blueparity_net" {
 }
 
 resource "aws_route53_record" "imap_blueparity_net" {
-  zone_id = "${aws_route53_zone.blueparity_net.zone_id}"
+  zone_id = aws_route53_zone.blueparity_net.zone_id
   name    = "imap"
   type    = "A"
   ttl     = "86400"

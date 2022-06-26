@@ -19,7 +19,7 @@ EOF
 }
 
 resource "aws_iam_role_policy_attachment" "ssm" {
-  role       = "${aws_iam_role.imap_instance.name}"
+  role       = aws_iam_role.imap_instance.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
 }
 
@@ -49,8 +49,8 @@ EOF
 }
 
 resource "aws_iam_role_policy_attachment" "attach_volume" {
-  role       = "${aws_iam_role.imap_instance.name}"
-  policy_arn = "${aws_iam_policy.attach_volume.arn}"
+  role       = aws_iam_role.imap_instance.name
+  policy_arn = aws_iam_policy.attach_volume.arn
 }
 
 resource "aws_iam_policy" "associate_address" {
@@ -75,11 +75,11 @@ EOF
 }
 
 resource "aws_iam_role_policy_attachment" "associate_address" {
-  role       = "${aws_iam_role.imap_instance.name}"
-  policy_arn = "${aws_iam_policy.associate_address.arn}"
+  role       = aws_iam_role.imap_instance.name
+  policy_arn = aws_iam_policy.associate_address.arn
 }
 
 resource "aws_iam_instance_profile" "imap_instance" {
   name = "${var.cluster_name}-instance-profile"
-  role = "${aws_iam_role.imap_instance.name}"
+  role = aws_iam_role.imap_instance.name
 }

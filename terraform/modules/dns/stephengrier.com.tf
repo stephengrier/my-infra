@@ -3,12 +3,12 @@ locals {
 }
 
 resource "aws_route53_zone" "stephengrier_com" {
-  name = "${local.stephengrier_com_domain}"
+  name = local.stephengrier_com_domain
 }
 
 resource "aws_route53_record" "stephengrier_com_mx" {
-  zone_id = "${aws_route53_zone.stephengrier_com.zone_id}"
-  name    = "${local.stephengrier_com_domain}"
+  zone_id = aws_route53_zone.stephengrier_com.zone_id
+  name    = local.stephengrier_com_domain
   type    = "MX"
   ttl     = "600"
 
@@ -22,8 +22,8 @@ resource "aws_route53_record" "stephengrier_com_mx" {
 }
 
 resource "aws_route53_record" "stephengrier_com_txt" {
-  zone_id = "${aws_route53_zone.stephengrier_com.zone_id}"
-  name    = "${local.stephengrier_com_domain}"
+  zone_id = aws_route53_zone.stephengrier_com.zone_id
+  name    = local.stephengrier_com_domain
   type    = "TXT"
   ttl     = "86400"
 
@@ -33,7 +33,7 @@ resource "aws_route53_record" "stephengrier_com_txt" {
 }
 
 resource "aws_route53_record" "www_stephengrier_com" {
-  zone_id = "${aws_route53_zone.stephengrier_com.zone_id}"
+  zone_id = aws_route53_zone.stephengrier_com.zone_id
   name    = "www"
   type    = "CNAME"
   ttl     = "300"
