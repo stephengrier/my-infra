@@ -13,8 +13,8 @@ resource "aws_route53_record" "grier_org_uk_mx" {
   ttl     = "3600"
 
   records = [
-    "10 mx0.123-reg.co.uk.",
-    "20 mx1.123-reg.co.uk.",
+    "10 smtp.secureserver.net.",
+    "20 mailstore1.secureserver.net.",
   ]
 }
 
