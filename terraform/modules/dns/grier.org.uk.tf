@@ -25,7 +25,7 @@ resource "aws_route53_record" "grier_org_uk_txt" {
   ttl     = "86400"
 
   records = [
-    "v=spf1 a mx ?all",
+    "v=spf1 include:secureserver.net ?all",
   ]
 }
 
