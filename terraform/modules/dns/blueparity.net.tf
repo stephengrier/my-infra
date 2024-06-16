@@ -44,11 +44,3 @@ resource "aws_route53_record" "smtp_domainkey_blueparity_net_txt" {
     "k=rsa; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDSjlWXaSXgqtbidbwmgIJ1C9EX7orjTiiM1wQ5m24Zm+zWXv7OLxCfFTwezAxLEN3pYEHS990v7XidAnaa5Fi2A7z+OjsMrdWBeMAlATUCDhh61wKghZb3C4g2jSZ+Uxy+fISBaMoU2zFzSI4KpN9KIrO3KObOmvH7GAX1pksqTQIDAQAB",
   ]
 }
-
-resource "aws_route53_record" "pugwash_blueparity_net" {
-  zone_id = aws_route53_zone.blueparity_net.zone_id
-  name    = "pugwash"
-  type    = "A"
-  ttl     = "86400"
-  records = ["86.54.115.54"]
-}
