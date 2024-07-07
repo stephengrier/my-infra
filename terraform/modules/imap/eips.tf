@@ -1,5 +1,5 @@
 resource "aws_eip" "imap" {
-  vpc = true
+  domain = "vpc"
 
   tags = {
     Name = "imap-eip"
