@@ -8,23 +8,20 @@ data "aws_ami" "ami" {
   }
 }
 
-data "template_file" "user_data" {
-  template = file("${path.module}/files/cloud-init.sh")
-
-  vars = {
-    environment    = "${var.environment}"
-    region         = "${data.aws_region.current.name}"
-    ldap_volume_id = "${aws_ebs_volume.ldap_data.id}"
-    imap_volume_id = "${aws_ebs_volume.imap_data.id}"
-    eip_id         = "${aws_eip.imap.id}"
-  }
-}
-
 resource "aws_launch_template" "cluster" {
   name_prefix = "${var.cluster_name}-instance"
   image_id    = data.aws_ami.ami.id
-  user_data   = base64encode(data.template_file.user_data.rendered)
-  key_name    = "cardno:000605972621"
+  user_data = base64encode(templatefile(
+    "${path.module}/files/cloud-init.sh",
+    {
+      environment    = "${var.environment}",
+      region         = "${data.aws_region.current.name}",
+      ldap_volume_id = "${aws_ebs_volume.ldap_data.id}",
+      imap_volume_id = "${aws_ebs_volume.imap_data.id}",
+      eip_id         = "${aws_eip.imap.id}"
+    }
+  ))
+  key_name = "cardno:000605972621"
 
   iam_instance_profile {
     name = aws_iam_instance_profile.imap_instance.name
