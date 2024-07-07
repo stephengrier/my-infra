@@ -1,6 +1,6 @@
 resource "aws_ebs_volume" "ldap_data" {
   availability_zone = element(data.aws_availability_zones.azs.names, 0)
-  snapshot_id       = aws_ebs_snapshot.ldap_data_snapshot.id
+  snapshot_id       = data.aws_ebs_snapshot.ldap_data_snapshot.id
   encrypted         = true
 
   tags = {
@@ -11,7 +11,7 @@ resource "aws_ebs_volume" "ldap_data" {
 
 resource "aws_ebs_volume" "imap_data" {
   availability_zone = element(data.aws_availability_zones.azs.names, 0)
-  snapshot_id       = aws_ebs_snapshot.imap_data_snapshot.id
+  snapshot_id       = data.aws_ebs_snapshot.imap_data_snapshot.id
   encrypted         = true
 
   tags = {
