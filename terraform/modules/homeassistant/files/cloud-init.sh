@@ -260,8 +260,12 @@ listener 8883
 cafile /mosquitto/tls/chain.pem
 certfile /mosquitto/tls/cert.pem
 keyfile /mosquitto/tls/privkey.pem
-allow_anonymous true
+allow_anonymous false
+password_file /mosquitto/config/passwd
 EOF
+
+# Make sure mosquitto's passwd file exists
+[ -f /var/lib/mosquitto/config/passwd ] || touch /var/lib/mosquitto/config/passwd
 
 # Finally, restart the nginx and mosquitto containers
 docker-compose -f $DOCKER_COMPOSE_FILE restart nginx mosquitto
