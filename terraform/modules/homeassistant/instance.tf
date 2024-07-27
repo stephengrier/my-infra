@@ -54,8 +54,7 @@ resource "aws_autoscaling_group" "asg" {
     instances_distribution {
       on_demand_base_capacity                  = 0
       on_demand_percentage_above_base_capacity = 0
-      spot_allocation_strategy                 = "lowest-price"
-      spot_instance_pools                      = length(local.spot_instance_types)
+      spot_allocation_strategy                 = "price-capacity-optimized"
     }
 
     launch_template {
