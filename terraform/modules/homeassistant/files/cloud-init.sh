@@ -70,8 +70,12 @@ aws --region ${region} ec2 attach-volume \
      --instance-id $(ec2metadata --instance-id) \
      --volume-id ${mosquitto_volume_id}
 
-# Give the OS a few seconds to create devices for the above volumes.
-sleep 5
+# Wait for the OS to create block devices for the above volumes.
+for _ in $(seq 30); do
+  [ -f '/dev/nvme1n1' ] && [ -f '/dev/nvme2n1' ] && break
+  echo 'Waiting for block devices to be created...'
+  sleep 1;
+done
 
 # Create partitions and filesystems if volumes are new.
 for vol in /dev/nvme1n1 /dev/nvme2n1; do
