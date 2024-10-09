@@ -72,7 +72,7 @@ aws --region ${region} ec2 attach-volume \
 
 # Wait for the OS to create block devices for the above volumes.
 for _ in $(seq 30); do
-  [ -f '/dev/nvme1n1' ] && [ -f '/dev/nvme2n1' ] && break
+  [ -b '/dev/nvme1n1' ] && [ -b '/dev/nvme2n1' ] && break
   echo 'Waiting for block devices to be created...'
   sleep 1;
 done
