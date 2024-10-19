@@ -19,6 +19,7 @@ resource "aws_launch_template" "ha_instance" {
       region              = data.aws_region.current.name,
       ha_volume_id        = aws_ebs_volume.ha_data.id,
       mosquitto_volume_id = aws_ebs_volume.mosquitto_data.id,
+      srv_volume_id       = aws_ebs_volume.srv_data.id,
       eip_id              = aws_eip.ha_instance.id
       server_name         = var.server_name
       mqtt_server_name    = var.mqtt_server_name

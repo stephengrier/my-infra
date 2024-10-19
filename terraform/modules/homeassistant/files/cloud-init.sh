@@ -70,6 +70,11 @@ aws --region ${region} ec2 attach-volume \
      --instance-id $(ec2metadata --instance-id) \
      --volume-id ${mosquitto_volume_id}
 
+aws --region ${region} ec2 attach-volume \
+     --device /dev/sdh \
+     --instance-id $(ec2metadata --instance-id) \
+     --volume-id ${srv_volume_id}
+
 # Wait for the OS to create block devices for the above volumes.
 for _ in $(seq 30); do
   [ -b '/dev/nvme1n1' ] && [ -b '/dev/nvme2n1' ] && break
@@ -78,7 +83,7 @@ for _ in $(seq 30); do
 done
 
 # Create partitions and filesystems if volumes are new.
-for vol in /dev/nvme1n1 /dev/nvme2n1; do
+for vol in /dev/nvme1n1 /dev/nvme2n1 /dev/nvme3n1; do
   blkid $${vol} > /dev/null && true
   if [ "$?" != "0" ]; then
     /sbin/parted $${vol} mklabel gpt --script
@@ -91,6 +96,7 @@ done
 
 echo '/dev/nvme1n1p1	/etc/homeassistant	ext4	defaults	0	0' >> /etc/fstab
 echo '/dev/nvme2n1p1	/var/lib/mosquitto	ext4	defaults	0	0' >> /etc/fstab
+echo '/dev/nvme3n1p1	/srv	ext4	defaults	0	0' >> /etc/fstab
 
 # Create mount points.
 mkdir -p /etc/homeassistant /var/lib/mosquitto
@@ -141,20 +147,20 @@ services:
     volumes:
       - /etc/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - /etc/nginx/conf.d:/etc/nginx/conf.d:ro
-      - /etc/certbot/www:/var/www/certbot:ro
-      - /etc/certbot/conf:/etc/nginx/ssl:ro
+      - /srv/certbot/www:/var/www/certbot:ro
+      - /srv/certbot/conf:/etc/nginx/ssl:ro
   certbot:
     image: certbot/certbot:latest
     volumes:
-      - /etc/certbot/www/:/var/www/certbot/:rw
-      - /etc/certbot/conf/:/etc/letsencrypt/:rw
+      - /srv/certbot/www/:/var/www/certbot/:rw
+      - /srv/certbot/conf/:/etc/letsencrypt/:rw
 EOF
 
 # Create mosquitto directory structure
 mkdir -p /var/lib/mosquitto/{config,data,log,tls}
 
 # Create directories for nginx and certbot config
-mkdir -p /etc/nginx/conf.d /etc/certbot/{conf,www}
+mkdir -p /etc/nginx/conf.d /srv/certbot/{conf,www}
 
 # Create an initial port 80 nginx config so that certbot can complete the
 # validation step for a new certificate from LetsEncrypt
@@ -206,19 +212,21 @@ EOF
 # Start the services
 docker-compose -f $DOCKER_COMPOSE_FILE up -d
 
-# Request a new TLS certificate from LetsEncrypt
+# Request a new TLS certificate from LetsEncrypt if we don't have one already
 # Specify a key type of 'rsa' as tasmota doesn't work with ECDSA
-docker-compose -f $DOCKER_COMPOSE_FILE run \
-               --rm certbot certonly \
-               --webroot \
-               --webroot-path /var/www/certbot/ \
-               -d ${server_name} \
-               -d ${mqtt_server_name} \
-               -m ${letsencrypt_email} \
-               --no-eff-email \
-               --agree-tos \
-               --key-type rsa \
-               ${certbot_extra_args}
+if [ ! -d /srv/certbot/conf/live/${server_name} ]; then
+  docker-compose -f $DOCKER_COMPOSE_FILE run \
+                 --rm certbot certonly \
+                 --webroot \
+                 --webroot-path /var/www/certbot/ \
+                 -d ${server_name} \
+                 -d ${mqtt_server_name} \
+                 -m ${letsencrypt_email} \
+                 --no-eff-email \
+                 --agree-tos \
+                 --key-type rsa \
+                 ${certbot_extra_args}
+fi
 
 # Now that we have a TLS cert, create an HTTPS server in nginx
 cat > /etc/nginx/conf.d/homeassistant_443.conf <<EOF
@@ -245,7 +253,7 @@ EOF
 
 # Copy the certs to a location mosquitto can use them.
 # Change ownership to the mosquito UID/GID so mosquitto can read them.
-cp -p /etc/certbot/conf/live/${server_name}/{cert.pem,privkey.pem,chain.pem} /var/lib/mosquitto/tls/
+cp -p /srv/certbot/conf/live/${server_name}/{cert.pem,privkey.pem,chain.pem} /var/lib/mosquitto/tls/
 chown 1883:1883 /var/lib/mosquitto/tls/*.pem
 
 # Create a mosquitto config
