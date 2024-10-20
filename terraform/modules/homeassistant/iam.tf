@@ -40,7 +40,6 @@ resource "aws_iam_policy" "attach_volume" {
       "Resource": [
         "arn:aws:ec2:${data.aws_region.current.name}:${data.aws_caller_identity.account.account_id}:instance/*",
         "arn:aws:ec2:${data.aws_region.current.name}:${data.aws_caller_identity.account.account_id}:volume/${aws_ebs_volume.ha_data.id}",
-        "arn:aws:ec2:${data.aws_region.current.name}:${data.aws_caller_identity.account.account_id}:volume/${aws_ebs_volume.mosquitto_data.id}",
         "arn:aws:ec2:${data.aws_region.current.name}:${data.aws_caller_identity.account.account_id}:volume/${aws_ebs_volume.srv_data.id}"
       ]
     }

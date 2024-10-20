@@ -66,11 +66,6 @@ aws --region ${region} ec2 attach-volume \
      --volume-id ${ha_volume_id}
 
 aws --region ${region} ec2 attach-volume \
-     --device /dev/sdg \
-     --instance-id $(ec2metadata --instance-id) \
-     --volume-id ${mosquitto_volume_id}
-
-aws --region ${region} ec2 attach-volume \
      --device /dev/sdh \
      --instance-id $(ec2metadata --instance-id) \
      --volume-id ${srv_volume_id}
@@ -83,7 +78,7 @@ for _ in $(seq 30); do
 done
 
 # Create partitions and filesystems if volumes are new.
-for vol in /dev/nvme1n1 /dev/nvme2n1 /dev/nvme3n1; do
+for vol in /dev/nvme1n1 /dev/nvme2n1; do
   blkid $${vol} > /dev/null && true
   if [ "$?" != "0" ]; then
     /sbin/parted $${vol} mklabel gpt --script
@@ -95,11 +90,10 @@ for vol in /dev/nvme1n1 /dev/nvme2n1 /dev/nvme3n1; do
 done
 
 echo '/dev/nvme1n1p1	/etc/homeassistant	ext4	defaults	0	0' >> /etc/fstab
-echo '/dev/nvme2n1p1	/var/lib/mosquitto	ext4	defaults	0	0' >> /etc/fstab
-echo '/dev/nvme3n1p1	/srv	ext4	defaults	0	0' >> /etc/fstab
+echo '/dev/nvme2n1p1	/srv	ext4	defaults	0	0' >> /etc/fstab
 
 # Create mount points.
-mkdir -p /etc/homeassistant /var/lib/mosquitto
+mkdir -p /etc/homeassistant /srv
 
 # Mount partitions.
 mount -a
@@ -118,9 +112,9 @@ services:
     container_name: mosquitto
     restart: unless-stopped
     volumes:
-      - /var/lib/mosquitto:/mosquitto
-      - /var/lib/mosquitto/data:/mosquitto/data
-      - /var/lib/mosquitto/log:/mosquitto/log
+      - /srv/mosquitto:/mosquitto
+      - /srv/mosquitto/data:/mosquitto/data
+      - /srv/mosquitto/log:/mosquitto/log
     ports:
       - 1883:1883
       - 8883:8883
@@ -157,7 +151,7 @@ services:
 EOF
 
 # Create mosquitto directory structure
-mkdir -p /var/lib/mosquitto/{config,data,log,tls}
+mkdir -p /srv/mosquitto/{config,data,log,tls}
 
 # Create directories for nginx and certbot config
 mkdir -p /etc/nginx/conf.d /srv/certbot/{conf,www}
@@ -253,11 +247,11 @@ EOF
 
 # Copy the certs to a location mosquitto can use them.
 # Change ownership to the mosquito UID/GID so mosquitto can read them.
-cp -p /srv/certbot/conf/live/${server_name}/{cert.pem,privkey.pem,chain.pem} /var/lib/mosquitto/tls/
-chown 1883:1883 /var/lib/mosquitto/tls/*.pem
+cp -p /srv/certbot/conf/live/${server_name}/{cert.pem,privkey.pem,chain.pem} /srv/mosquitto/tls/
+chown 1883:1883 /srv/mosquitto/tls/*.pem
 
 # Create a mosquitto config
-cat > /var/lib/mosquitto/config/mosquitto.conf <<EOF
+cat > /srv/mosquitto/config/mosquitto.conf <<EOF
 persistence true
 persistence_location /mosquitto/data/
 persistent_client_expiration 14d
@@ -277,7 +271,7 @@ password_file /mosquitto/config/passwd
 EOF
 
 # Make sure mosquitto's passwd file exists
-[ -f /var/lib/mosquitto/config/passwd ] || touch /var/lib/mosquitto/config/passwd
+[ -f /srv/mosquitto/config/passwd ] || touch /srv/mosquitto/config/passwd
 
 # Finally, restart the nginx and mosquitto containers
 docker-compose -f $DOCKER_COMPOSE_FILE restart nginx mosquitto
