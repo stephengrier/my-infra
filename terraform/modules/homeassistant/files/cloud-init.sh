@@ -273,6 +273,27 @@ EOF
 # Make sure mosquitto's passwd file exists
 [ -f /srv/mosquitto/config/passwd ] || touch /srv/mosquitto/config/passwd
 
-# Finally, restart the nginx and mosquitto containers
+# Restart the nginx and mosquitto containers
 docker-compose -f $DOCKER_COMPOSE_FILE restart nginx mosquitto
 
+# Lastly, create a cron job to renew the LetsEncrypt certificate
+cat > /etc/cron.daily/certbot-renew <<EOF
+#!/usr/bin/env bash
+set -ueo pipefail
+
+CERTBOT_CONF_DIR=/srv/certbot/conf
+MOSQUITTO_TLS_DIR=/srv/mosquitto/tls
+
+docker-compose \\
+    -f $DOCKER_COMPOSE_FILE run \\
+    --rm \\
+    certbot renew --deploy-hook 'touch /etc/letsencrypt/renewed'
+
+if [ -f "\$CERTBOT_CONF_DIR/renewed" ]; then
+    cp -p "\$CERTBOT_CONF_DIR"/live/${server_name}/{cert.pem,privkey.pem,chain.pem} "\$MOSQUITTO_TLS_DIR"/
+    chown 1883:1883 "\$MOSQUITTO_TLS_DIR"/*.pem
+    docker-compose -f $DOCKER_COMPOSE_FILE restart nginx mosquitto
+    rm "\$CERTBOT_CONF_DIR/renewed"
+fi
+EOF
+chmod 0755 /etc/cron.daily/certbot-renew
