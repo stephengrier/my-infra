@@ -86,11 +86,13 @@ for vol in /dev/nvme1n1 /dev/nvme2n1; do
     # Wait a second for the block device to appear.
     sleep 1
     mkfs.ext4 $${vol}p1
+    # Add a label we can use to mount the volume consistently.
+    e2label $${vol}p1 $${vol}p1
   fi
 done
 
-echo '/dev/nvme1n1p1	/etc/homeassistant	ext4	defaults	0	0' >> /etc/fstab
-echo '/dev/nvme2n1p1	/srv	ext4	defaults	0	0' >> /etc/fstab
+echo 'LABEL=/dev/nvme1n1p1	/etc/homeassistant	ext4	defaults	0	0' >> /etc/fstab
+echo 'LABEL=/dev/nvme2n1p1	/srv	ext4	defaults	0	0' >> /etc/fstab
 
 # Create mount points.
 mkdir -p /etc/homeassistant /srv
